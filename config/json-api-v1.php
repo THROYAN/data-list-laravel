@@ -50,7 +50,7 @@ return [
     | different here. E.g. `App\Models`.
     |
     */
-    'model-namespace' => null,
+    'model-namespace' => 'App\Model',
 
     /*
     |--------------------------------------------------------------------------
@@ -66,7 +66,7 @@ return [
     | `'posts' => App\Post::class`
     */
     'resources' => [
-        'posts' => \App\Post::class,
+        'houses' => \App\Model\House::class,
     ],
 
     /*
