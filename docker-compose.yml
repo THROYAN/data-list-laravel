@@ -1,25 +1,29 @@
 version: '3'
 services:
-    app:
-        build:
-            context: ./.docker/sail/runtimes/8.1
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.1/app
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
-        ports:
-            - '${APP_PORT:-80}:80'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+    nginx:
+        image: nginx:alpine
         volumes:
-            - '.:/var/www/html'
-        networks:
-            - sail
+            - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - ${APP_PORT:-80}:80
+        depends_on:
+            - backend
+            - frontend
+    frontend:
+        image: node:current-alpine
+        user: ${WWWUSER}:${WWWGROUP}
+        working_dir: /home/node/app
+        volumes:
+        - ./frontend:/home/node/app
+        environment:
+            NODE_ENV: development
+        command: "npm run dev"
+    backend:
+        build:
+            context: ./.docker/laravel
+        user: ${WWWUSER}:${WWWGROUP}
+        volumes:
+            - '.:/app'
         depends_on:
             - mysql
     mysql:
