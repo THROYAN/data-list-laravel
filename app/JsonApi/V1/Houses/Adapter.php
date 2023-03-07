@@ -41,7 +41,10 @@ class Adapter extends AbstractAdapter
      */
     protected function filter($query, Collection $filters)
     {
-        $this->filterWithScopes($query, $filters);
-    }
+        $this->filterWithScopes($query, $filters->except('name'));
 
+        if ($name = $filters->get('name')) {
+            $query->where('houses.name', 'like', "%{$name}%");
+        }
+    }
 }
