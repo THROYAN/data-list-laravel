@@ -4,8 +4,6 @@ import HouseList from './components/HouseList.vue';
 
 <template>
   <div id="app">
-    <div class="wrapper">
-      <HouseList/>
-    </div>
+    <HouseList/>
   </div>
 </template>
