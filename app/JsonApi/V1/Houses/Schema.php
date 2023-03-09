@@ -35,6 +35,7 @@ class Schema extends SchemaProvider
             'bathroomCount' => $resource->bathroom_count,
             'storeyCount' => $resource->storey_count,
             'garageCount' => $resource->garage_count,
+            'price' => $resource->price,
         ];
     }
 }
