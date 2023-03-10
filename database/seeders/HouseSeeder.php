@@ -28,7 +28,7 @@ class HouseSeeder extends Seeder
                     'bathroom_count' => \intval($data['2']),
                     'storey_count' => \intval($data['3']),
                     'garage_count' => \intval($data['4']),
-                    'price' => \doubleval($data['1']),
+                    'price' => \doubleval($data['5']),
                 ]);    
             }
             $firstline = false;
