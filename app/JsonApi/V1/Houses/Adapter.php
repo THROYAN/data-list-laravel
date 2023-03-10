@@ -41,10 +41,31 @@ class Adapter extends AbstractAdapter
      */
     protected function filter($query, Collection $filters)
     {
-        $this->filterWithScopes($query, $filters->except('name'));
+        $filters = $filters->filter(fn ($e) => !\is_null($e));
+
+        $this->filterWithScopes($query, $filters->except('name', 'price'));
 
         if ($name = $filters->get('name')) {
             $query->where('houses.name', 'like', "%{$name}%");
+        }
+
+        if ($price = $filters->get('price')) {
+            if (!is_array($price)) {
+                $query->where('houses.price', '=', $price);
+
+                return;
+            }
+
+            if (isset($price[0]) && isset($price[1])) {
+                $price = ['from' => $price[0], 'to' => $price[1]];
+            }
+
+            if (isset($price['from'])) {
+                $query->where('houses.price', '>=', $price['from']);
+            }
+            if (isset($price['to'])) {
+                $query->where('houses.price', '<=', $price['to']);
+            }
         }
     }
 }
